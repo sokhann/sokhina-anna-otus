@@ -1,0 +1,19 @@
+{
+  "name": "sokhina-anna-otus",
+  "version": "1.0.0",
+  "description": "javascript developer professional",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sokhann/sokhina-anna-otus.git"
+  },
+  "author": "sokhann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sokhann/sokhina-anna-otus/issues"
+  },
+  "homepage": "https://github.com/sokhann/sokhina-anna-otus#readme"
+}
