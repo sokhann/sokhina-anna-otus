@@ -1,9 +1,10 @@
 export interface CityInfoProps {
   id: number
-  city: string
+  name: string
   country: string
   temperature: number
   humidity: number
   description: string
   windSpeed: number
+  iconUrl?: string
 }

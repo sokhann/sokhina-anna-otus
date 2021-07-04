@@ -1,1 +1,1 @@
-export { CityFavorites } from './CityFavorites'
+export * from './CityFavorites'
