@@ -52,7 +52,7 @@ export const CitySearch: FC<CitySearchProps> = ({
   const [searchResult, setSearchResult] = useState<CityInfoProps | null>(null)
 
   const isCityFavorite = (id: number) => {
-    const isFavorite = favoriteCities.find((item:CityProps) => item.id === id) != null
+    const isFavorite = !!favoriteCities.find((item:CityProps) => item.id === id)
     return isFavorite
   }
 

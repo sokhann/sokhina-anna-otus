@@ -25,7 +25,7 @@ class City extends React.Component<CityPageProps, CityPageState> {
     fetchWeatherDataById(cityId)
     .then(
       response => {
-        const favorite = cities.find((item:CityProps) => item.id === cityId) != null
+        const favorite = !!cities.find((item:CityProps) => item.id === cityId)
         this.setState({ 
           cityData: response,
           isFavorite: favorite
