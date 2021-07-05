@@ -20,7 +20,7 @@ const useStyles = makeStyles(() =>
     },
     info: {
       display: 'flex',
-      alignItems: 'baseline'
+      alignItems: 'center'
     },
     temperature: {
       fontSize: 32
@@ -50,7 +50,7 @@ const useStyles = makeStyles(() =>
 interface CityCardProps {
   cityInfo: CityInfoProps
   isFavorite: boolean
-  onFavoriteClick: (id: number) => void
+  onFavoriteClick: (id: number, name: string) => void
 }
 
 export const CityCard: FC<CityCardProps> = ({
@@ -59,20 +59,21 @@ export const CityCard: FC<CityCardProps> = ({
   onFavoriteClick 
 }) => {
   const classes = useStyles();
-  const { id, city, country, temperature, description, humidity, windSpeed } = cityInfo
+  const { id, name, country, temperature, description, humidity, windSpeed, iconUrl } = cityInfo
 
   return <Card className={classes.card}>
-    <IconButton  className={classes.iconButton} aria-label="add to favorites" onClick={() => onFavoriteClick(id)}>
+    <IconButton  className={classes.iconButton} aria-label="add to favorites" onClick={() => onFavoriteClick(id, name)}>
       { isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon /> }
     </IconButton>
     <CardHeader
-      title={city}
+      title={name}
       subheader={country}
       className={classes.header}
     />
     <CardContent className={classes.content}>
       <p className={classes.info}>
         <span className={classes.temperature}>{ Math.floor(temperature)}°C</span>
+        { iconUrl && <img src={ iconUrl } alt={ description } />}
         <span className={classes.description}>{ description }</span>
       </p>
       <p>Humidity: { humidity }%</p>

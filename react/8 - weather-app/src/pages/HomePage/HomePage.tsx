@@ -1,79 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux'
+
 import { CitySearch } from "../../components/CitySearch"
-import { CityCard } from "../../components/CityCard";
-import { CityFavorites } from '../../components/CityFavorites';
-import { searchCityRequest } from '../../services/WeatherService';
+import { cityAdd, cityDelete, CityProps, CityStateProps, CityActionTypes } from '../../stores/cityStore';
 
-import { CityInfoProps } from '../../interfaces/CityInfoProps'
-
-export const HomePage = () => {
-  const [searchValue, setSearchValue] = useState('')
-  const [error, setError] = useState(null);
-  const [searchResult, setSearchResult] = useState<CityInfoProps | null>(null)
-  const [favorites, setFavorites] = useState<CityInfoProps[] | []>([])
-
-  const isCityFavorite = (id: number) => favorites.find(item => item.id === id) != null
-
-  const changeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setError(null)
-    setSearchValue(e.target.value);
-  };
-
-  const handleSearchCity = () => {
-    searchCityRequest(searchValue)  
-    .then((response) => {
-      const { data } = response
-
-      const results = {
-        id: data.id,             
-        city: data.name,
-        country: data.sys.country,
-        temperature: data.main.temp,
-        humidity: data.main.humidity,
-        description: data.weather[0].description,
-        windSpeed: data.wind.speed
-      }
-
-      setSearchResult(results)
-      setSearchValue('')
-    })
-    .catch(err => setError(err))
+class Home extends React.Component<HomeProps> {
+  render() {
+    return <div>
+      <CitySearch 
+        favoriteCities={this.props.cities}
+        onAddCity={this.props.onAddCity}
+        onRemoveCity={this.props.onRemoveCity}
+      />
+    </div>
   }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if(e.key === 'Enter'){
-      handleSearchCity()
-    }
-  }
-
-  const handleCityFavorite = (id: number) => {
-    let udpatedFavotites = []
-
-    if (searchResult && !isCityFavorite(id)) {
-      udpatedFavotites = [...favorites, searchResult]
-    } else {
-      udpatedFavotites = favorites.filter(item => item.id !== id)
-    }
-
-    setFavorites(udpatedFavotites)
-  }
-
-  return <div>
-    <CitySearch 
-      searchValue={searchValue}
-      error={error}
-      onChangeValue={changeSearchValue}
-      handleSearch={handleSearchCity}
-      handleKeyPress={handleKeyPress}
-    />
-    {
-      searchResult == null ? null : 
-        <CityCard 
-          cityInfo={searchResult}
-          isFavorite={isCityFavorite(searchResult.id)}
-          onFavoriteClick={handleCityFavorite}
-        />
-    }
-    { favorites.length > 0 && <CityFavorites items={favorites} /> }
-  </div>
 }
+
+interface HomeProps {
+  cities: CityProps[],
+  onAddCity: (id: number, name: string) => void
+  onRemoveCity: (id: number) => void
+}
+
+const mapStateToProps = (state: CityStateProps) => {
+  return {
+    cities: state.cities
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<CityActionTypes>) => {
+  return {
+    onAddCity: (id: number, name: string) => dispatch(cityAdd(id, name)),
+    onRemoveCity: (id: number) => dispatch(cityDelete(id))
+  };
+}
+
+export const HomePage = connect(mapStateToProps, mapDispatchToProps)(Home)
